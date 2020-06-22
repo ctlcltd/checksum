@@ -38,9 +38,9 @@ with entries relative to the base folder path (eg. /drive/MyFolder/), in a forma
 
 ### Usage
 ```
-./checksum.sh [-U | -C] [-H [...]] [-B [...]] [-T (,[...])] [--log] [-V] [folder]
+./checksum.sh [-U | -C] [-H [...]] [-B [...]] [-T (,[...])] [--force] [--log] [-V] [folder]
 
-./checksum.sh [--update | --check] [--hash-file [...]] [--base-folder [...]] [--file-types (,[...])] [--log] [--verbose] [folder]
+./checksum.sh [--update | --check] [--hash-file [...]] [--base-folder [...]] [--file-types (,[...])] [--force] [--log] [--verbose] [folder]
 
 ```
  
