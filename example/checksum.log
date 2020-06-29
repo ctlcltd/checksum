@@ -1,4 +1,4 @@
-./checksum.sh 2020-06-22T00:01:00+0200
+./checksum.sh 2020-06-29T00:01:00+02:00
 _FOLDER=
 _DATATABLE=
 _TYPES=
@@ -15,7 +15,7 @@ FILETYPES=trivial,tpce,trv0,trv1
 DATATABLE=/drive/checksum.check
 LOGFILE=/drive/checksum.log
 PLATFORM=darwin
-RELEASE=2020-06-22 r06
+RELEASE=2020-06-29 r07
 checksum__update ()
 File: "checksum.check" not exists.
 File touch: "/drive/checksum.check"
@@ -25,14 +25,14 @@ File head RELBASE: MyFolder
 File head TYPES: trivial,tpce,trv0,trv1
 Updating hash table ...
 ./,,,
-./,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+./,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 ./SubFolder,,,
-./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 Writing file ...
 File write: "/drive/checksum.check"
 Exit status code: 0
 
-./checksum.sh 2020-06-22T00:02:00+0200
+./checksum.sh 2020-06-29T00:02:00+02:00
 _FOLDER=./MyFolder/SubFolder
 _DATATABLE=
 _TYPES=
@@ -48,7 +48,7 @@ FOLDER=/drive/MyFolder
 FILETYPES=trivial,tpce,trv0,trv1
 LOGFILE=/drive/checksum.log
 PLATFORM=darwin
-RELEASE=2020-06-22 r06
+RELEASE=2020-06-29 r07
 checksum__update ()
 File: "checksum.check"
 Reading hash table.
@@ -60,11 +60,11 @@ Read to line: 7
 Read substring line: 6
 Updating hash table ...
 ./SubFolder,,,
-./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 Nothing to update.
 Exit status code: 0
 
-./checksum.sh 2020-06-22T00:03:00+0200
+./checksum.sh 2020-06-29T00:03:00+02:00
 _FOLDER=./MyFolder/SubFolder
 _DATATABLE=
 _TYPES=
@@ -80,7 +80,7 @@ FOLDER=/drive/MyFolder/SubFolder
 FILETYPES=trivial,tpce,trv0,trv1
 LOGFILE=/drive/checksum.log
 PLATFORM=darwin
-RELEASE=2020-06-22 r06
+RELEASE=2020-06-29 r07
 checksum__update ()
 File: "checksum.check"
 Reading hash table.
@@ -91,16 +91,16 @@ Read from line: 6
 Read to line: 7
 Updating hash table ...
 ./SubFolder,,,
-./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 ./SubFolder/Yet Another Subfolder,,,
-./SubFolder/Yet Another Subfolder,file.trv0,2002-02-02T02:02:02+0000,7f138a09169b250e9dcb378140907378
+./SubFolder/Yet Another Subfolder,file.trv0,2002-02-02T02:02:02+00:00,7f138a09169b250e9dcb378140907378
 Writing file ...
 File move: "/drive/checksum.check" to ".checksum.check.tmpfile"
 File write: "/drive/checksum.check"
 File remove: ".checksum.check.tmpfile"
 Exit status code: 0
 
-./checksum.sh 2020-06-22T00:04:00+0200
+./checksum.sh 2020-06-29T00:04:00+02:00
 _FOLDER=./MyFolder/SubFolder
 _DATATABLE=
 _TYPES=
@@ -116,7 +116,7 @@ FOLDER=/drive/MyFolder/SubFolder
 FILETYPES=trivial,tpce,trv0,trv1
 LOGFILE=/drive/checksum.log
 PLATFORM=darwin
-RELEASE=2020-06-22 r06
+RELEASE=2020-06-29 r07
 checksum__check ()
 File: "checksum.check"
 Reading hash table.
@@ -127,12 +127,12 @@ Read from line: 6
 Read to line: 9
 Checking ...
 ./SubFolder,,,
-./SubFolder,file.trivial,2002-02-02T02:02:02+0000,1bc29b36f623ba82aaf6724fd3b16718
+./SubFolder,file.trivial,2002-02-02T02:02:02+00:00,1bc29b36f623ba82aaf6724fd3b16718
 ./SubFolder/Yet Another Subfolder,,,
-./SubFolder/Yet Another Subfolder,file.trv0,2002-02-02T02:02:02+0000,7f138a09169b250e9dcb378140907378
+./SubFolder/Yet Another Subfolder,file.trv0,2002-02-02T02:02:02+00:00,7f138a09169b250e9dcb378140907378
 Diff:
 2c2
-< ./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+< ./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 ---
-> ./SubFolder,file.trivial,2002-02-02T02:02:02+0000,1bc29b36f623ba82aaf6724fd3b16718
+> ./SubFolder,file.trivial,2002-02-02T02:02:02+00:00,1bc29b36f623ba82aaf6724fd3b16718
 Exit status code: 0

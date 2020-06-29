@@ -2,7 +2,7 @@
 #  checksum.sh
 #  
 #  @author Leonardo Laureti <https://loltgt.ga>
-#  @version 2020-06-22 r06
+#  @version 2020-06-29 r07
 #  @license MIT License
 #  
 #  Checksum files and directories.
@@ -27,7 +27,7 @@
 #    
 #    relative path, file name, last modified time ISO-8601, MD5 hash
 #    
-#    ./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378
+#    ./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378
 #  
 #  @example ./checksum.sh -H checksum_File_CSV.check -C -B MyFolder ./MyFolder/SubFolder
 #  
@@ -38,8 +38,7 @@ _DEFAULT_FILETYPES="*"
 _DEFAULT_LOGFILE="checksum.log"
 
 _SCRIPTNAME=$(basename "$0")
-_SCRIPTVERSION="2020-06-22 r06"
-_CURRTIME=$(date "+%Y-%m-%dT%H:%M:%S%z")
+_SCRIPTVERSION="2020-06-29 r07"
 
 _UPDATE=0
 _CHECK=0
@@ -229,7 +228,7 @@ checksum__traverse ()
 	DATA=""
 	local types=$(echo -e "$FILETYPES")
 	local directories=$(checksum__find "$1" "d") ; local files
-	local not_verb=$([[ $_VERBOSE -eq 0 ]] && 1)
+	local not_verb=$([[ $_VERBOSE -eq 0 ]] && echo 1)
 	local dir ; local reldir
 	local file ; local filename ; local lmtime ; local hash
 	local line
@@ -299,11 +298,11 @@ checksum__update ()
 	if [[ $init -eq 1 || $READ_SUB -eq -1 ]]; then
 		TABLE=$(echo -e "$DATA")
 	else
-		[[ _FORCE -eq 0 ]] && source=$(tail -n +4 "$DATATABLE")
+		[[ $_FORCE -eq 0 ]] && source=$(tail -n +4 "$DATATABLE")
 
 		TABLE=$(echo -e "${TABLE/\[\[\[\[SUBSTRING\]\]\]\]/$DATA}")
 
-		if [[ _FORCE -eq 0 && "$source" == "$TABLE" ]]; then
+		if [[ $_FORCE -eq 0 && "$source" == "$TABLE" ]]; then
 			checksum__log "Nothing to update."
 			return 0
 		fi
@@ -344,14 +343,14 @@ checksum__check ()
 	checksum__log "Diff:"
 
 	diff=$(checksum__diff "$TABLE" "$DATA")
-	checksum__log "$_DIFF" 1
+	checksum__log "$diff" 1
 
-	if [[ _FORCE -eq 0 && "$TABLE" == "$DATA" ]]; then
+	if [[ $_FORCE -eq 0 && "$TABLE" == "$DATA" ]]; then
 		echo "0"
 		return 0
 	fi
 
-	diff=""
+	diff_trim=""
 	reldir=$(checksum__rel "$RELFOLDER" "$RELBASE")
 	[[ "$reldir" == "." ]] && reldir="./" || reldir="./$reldir"
 
@@ -364,7 +363,7 @@ checksum__check ()
 			reline="${reline//\"\"/\"}"
 		fi
 		if [[ "$reline" == "> $reldir"* || "$reline" == "< $reldir"* || "$reline" == "---" ]]; then
-			diff_trim=$(echo -e "$diff\n$line")
+			diff_trim=$(echo -e "$diff_trim\n$line")
 		fi
 	done
 
@@ -382,6 +381,19 @@ checksum__platform ()
 	esac
 }
 
+# extended datetime according to ISO 8601-1:2019
+# @global PLATFORM
+checksum__timestamp ()
+{
+	if [[ "$PLATFORM" == "*ux" ]]; then
+		date "+%Y-%m-%dT%H:%M:%S%:z"
+	else
+		local timestamp=$(date "+%Y-%m-%dT%H:%M:%S%z")
+		echo "${timestamp:0:20}${timestamp:20:2}:${timestamp:22:2}"
+	fi
+}
+
+# @global PLATFORM_PATH
 # @param $1 relative path
 checksum__abs ()
 {
@@ -393,6 +405,7 @@ checksum__abs ()
 }
 
 # @global PWD
+# @global PLATFORM_PATH
 # @param $1 absolute path
 # @param $2 base path [$PWD]
 checksum__rel ()
@@ -408,7 +421,7 @@ checksum__rel ()
 	fi
 }
 
-# CSV field according RFC-4180
+# CSV field according to RFC-4180
 # percent sign % replaced double for safe printf
 # @todo shilling mark \ replaced with : by find
 # @var stdin
@@ -448,15 +461,19 @@ checksum__diff ()
 	diff <(echo -e "$1") <(echo -e "$2")
 }
 
+# extended datetime according to ISO 8601-1:2019
+# @global PLATFORM
 checksum__lmodtime ()
 {
 	if [[ "$PLATFORM" == "*ux" ]]; then
-		stat -c "%y" "$1" | date -f - "+%Y-%m-%dT%H:%M:%S%z"
+		stat -c "%y" "$1" | date -f - "+%Y-%m-%dT%H:%M:%S%:z"
 	else
-		stat -f "%Sm" -t "%Y-%m-%dT%H:%M:%S%z" "$1"
+		local filesdt=$(stat -f "%Sm" -t "%Y-%m-%dT%H:%M:%S%z" "$1")
+		echo "${filesdt:0:20}${filesdt:20:2}:${filesdt:22:2}"
 	fi
 }
 
+# @global PLATFORM_HASH
 # @param $1 file
 checksum__hashing ()
 {
@@ -599,13 +616,14 @@ fi
 
 RELPATH=$(checksum__rel "$PWD")
 LOGFILE=$(checksum__abs "$_DEFAULT_LOGFILE")
+CURRTIME=$(checksum__timestamp)
 
 if [[ $_LOG -eq 1 && -s "$LOGFILE" ]]; then
 	echo "" >> "$LOGFILE"
 fi
 
 
-checksum__log "$0 $_CURRTIME" 1
+checksum__log "$0 $CURRTIME" 1
 checksum__log "_FOLDER=$_FOLDER" 1
 checksum__log "_DATATABLE=$_DATATABLE" 1
 checksum__log "_BASEFOLDER=$_BASEFOLDER" 1

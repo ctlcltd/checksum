@@ -29,7 +29,7 @@ with entries relative to the base folder path (eg. /drive/MyFolder/), in a forma
 
 * _relative path, file name, last modified time ISO-8601, MD5 hash_
 
-  _./SubFolder,file.trivial,1970-01-01T00:00:01+0000,7f138a09169b250e9dcb378140907378_
+  _./SubFolder,file.trivial,1970-01-01T00:00:01+00:00,7f138a09169b250e9dcb378140907378_
 
 
 ```
